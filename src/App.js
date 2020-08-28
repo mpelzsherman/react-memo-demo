@@ -13,7 +13,7 @@ const App = () => {
         type: "public",
       })
       .then(({ data }) => {
-        setRepos(data);
+        setRepos(data.sort((r1, r2) => (r1.name > r2.name ? 1 : -1)));
       });
   };
 
@@ -26,8 +26,11 @@ const App = () => {
 
   return (
     <div className="App">
-      <input type="button" value="Fetch Repos" onClick={fetchRepos} />
-      <input type="text" value={limit} onChange={handleLimitChange} />
+      <div className={"controls"}>
+        <input type="button" value="Fetch Repos" onClick={fetchRepos} />
+        <h2>Limit:</h2>
+        <input type="text" value={limit} onChange={handleLimitChange} />
+      </div>
       <RepoList repos={repos} limit={limit} />
     </div>
   );
