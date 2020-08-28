@@ -1,14 +1,12 @@
 import React from "react";
 import Repo from "./Repo";
 
-const RepoList = ({ repos, limit = 10 }) => {
+const RepoList = ({ repos, limit = 30 }) => {
   console.log("rendering RepoList; limit is", limit);
-  const repoElements = [];
   if (repos && repos.length > 0) {
-    for (let i = 0; i < limit; i++) {
-      repoElements.push(<Repo repo={repos[i]} key={repos[i].id} />);
-    }
-    return repoElements;
+    return repos
+      .slice(0, limit)
+      .map((repo) => <Repo repo={repo} key={repo.id} />);
   }
   return null;
 };
