@@ -1,26 +1,36 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import { Octokit } from "@octokit/rest";
+import RepoList from "./RepoList";
 
-function App() {
+const octokit = new Octokit();
+
+const App = () => {
+  const fetchRepos = () => {
+    octokit.repos
+      .listForOrg({
+        org: "octokit",
+        type: "public",
+      })
+      .then(({ data }) => {
+        setRepos(data);
+      });
+  };
+
+  const [repos, setRepos] = useState([]);
+  const [limit, setLimit] = useState(10);
+
+  const handleLimitChange = (e) => {
+    setLimit(Math.min(e.currentTarget.value, 30));
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <input type="button" value="Fetch Repos" onClick={fetchRepos} />
+      <input type="text" value={limit} onChange={handleLimitChange} />
+      <RepoList repos={repos} limit={limit} />
     </div>
   );
-}
+};
 
 export default App;
